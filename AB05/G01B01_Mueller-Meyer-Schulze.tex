@@ -21,26 +21,65 @@ Das Ergebnis der referentiellen Aktionen darf nicht von der Reihenfolge der Ausf
 
 \subsection*{c) Unsicherheit}
 Beim Löschen eines Eintrags aus BenutzerIn gibt es 2 unterschiedliche mögliche Effekte auf die Einträge von Rubrikzuordnung.\\
-Das Löschen könnte auf direktem Weg kaskadieren oder per indirektem Weg über Rubriken verboten werden.
+Das Löschen könnte auf direktem Weg kaskadieren oder per indirektem Weg über Rubriken verboten werden und so unterschiedliche Ergebnisse erzielt werden, was das Schema unsicher macht.
 
 \subsection*{d) Vorkehrungen}
 Referenz auf BenutzerIn von Rubrikzuordnung : On Delete CASCADE -> On Delete RESTRICT
 
+\newpage
+\section*{Aufgabe 2: Änderbarkeit von Sichten}
 
-\section*{Änderbarkeit von Sichten}
+\subsection*{Sichterstellung}
+\subsubsection*{i) Enterprise-Crew}
+\begin{verbatim}
+CREATE VIEW EnterpriseCrew AS
+    SELECT b.BNr, b.Name, b.Rang
+    FROM Raumschiffe r, Besatzungsmitglieder b
+    WHERE b.Schiff = r.RNr
+    AND r.Name = 'Enterprise';
+		
+Die Sicht ist nicht änderbar, da hier Tabellen verbunden werden.
+\end{verbatim}
 
-\begin{RMSchma}
-Person(\soliduline{PID}, Name, Vorname, \dashuline{(HaustierName, HaustierRasse) $\rightarrow$ (Haustier.Name, Haustier.Rasse)})
+\subsubsection*{ii) Captains}
+\begin{verbatim}
+CREATE VIEW Captains AS
+    SELECT Name
+    FROM Besatzungsmitglieder
+    WHERE Rang = 'Captain';
+		
+Auch hier ist die Sicht nicht änderbar, doch diesmal aus dem Grund,
+dass sie nicht den Primärschlüssel der referenzierten Besatzungsmitglieder-
+Relation enthält.
+\end{verbatim}
 
-Haustier(\soliduline{Name, Rasse}, \dashuline{Herrchen $\rightarrow$ Person.PID})
-\end{RMSchma}
+\subsubsection*{iii) WarpFed}
+\begin{verbatim}
+CREATE VIEW WarpFed AS
+    SELECT RNr, Fraktion, Baujahr
+    FROM Raumschiffe
+    WHERE Geschwindigkeit >= 1
+    AND Fraktion = 'Förderation';
 
+Diesmal ist die Sicht änderbar.
+\end{verbatim}
 
+\subsection*{b) Änderbarkeit}
+\begin{tabular}{|c|l|}
+\hline
+i)&Es handelt sich um eine erlaubte Operation.\\
+\hline
+ii)& Es handelt sich um eine nicht erlaubte Operation, da das Schiff nicht zur Förderation gehört.\\
+\hline
+iii)& Es handelt sich um eine erlaubte Operation.\\
+\hline
+iv)& Es handelt sich um eine Operation, die zurückgewiesen wird.\\
+\hline
+v)& Es handelt sich um eine erlaubte Operation, das Tupel taucht jedoch nicht in der Sicht auf.\\
+\hline
+\end{tabular}
 
-
-
-
-\section*{Serialisierbarkeit und Anomalien}
+\section*{Aufgabe 3: Serialisierbarkeit und Anomalien}
 \subsection*{a) Belegungen}
 \begin{tabular}{|c|c|c|c|c|c|c|}
 \hline
@@ -91,33 +130,7 @@ $S_6$&Der Schedule ist seriell. Es wird $T_2$ vor $T_1$ ausgeführt.\\
 \end{tabular}
 
 \newpage
-\section{Aufgabe 4: Transaktionen}
-
-
-\section{Beispiel für Operatorbaum}
-
-\begin{tikzpicture}
-\node (Haustier) {Haustier};
-\node (Wolf) [left=25mm of Haustier] {Wolf};
-\node (join1) [above=20mm of $(Haustier)!.5!(Wolf)$] {$\verbund{Wolf.WID=Haustier.HID}$};
-\node (selektion1) [above=of join1] {$\selektion{Name=\wert{Hasso}}$};
-\node (projektion) [above=of selektion1] {$\projektion{Rasse}$};
-\node (final) [above=of projektion] {};
-
-\path (Haustier) edge node[smallr,near start,above right] {?? Tupel\\?? Attribute} (join1);
-\path (Wolf) edge node[smalll,near start,above left] {?? Tupel\\?? Attribute} (join1);
-\path (join1) edge node[smallr,near start,above left] {?? Tupel\\?? Attribute} (selektion1);
-\path (selektion1) edge node[smallr,midway,left] {$??\cdot\frac{??}{??}=??$ Tupel\\?? Attribute} (projektion);
-\path (projektion) edge node[smallr,midway,left] {$??$ Tupel\\1 Attribut} (final);
-\end{tikzpicture}
-
-
-
-
-
-
-
-\section{Beispiel für Tabelle mit Sperranforderungen}
+\section*{Aufgabe 4: Transaktionen}
 
 \begin{tabular}{|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{1cm}|p{1cm}|p{1cm}|p{3cm}|}
 \hline
@@ -126,27 +139,42 @@ Zeitschritt & T\ts{1} & T\ts{2} & T\ts{3} & x & y & z & Bemerkung\\
 \hline
 0 &  &  &  & NL & NL & NL & \\
 \hline
-1 & lock(x,X) &  &  & X\ts{1} & NL & NL & \\
+1 & lock(x,X) 	&  			&  			& X\ts{1} & NL 		& NL & \\
 \hline
-2 & write(x) & lock(y,R) &  & X\ts{1} & R\ts{2} & NL & \\
+2 & write(x) 	& lock(y,R) &  			& X\ts{1} & R\ts{2} & NL & \\
 \hline
-3 &  &  &  &  &  &  & \\
+3 &  			& read(y)	& lock(z,R) & X\ts{1} & R\ts{2} & R\ts{3} & \\
 \hline
-4 &  &  &  &  &  &  & \\
+4 &  			&  			& read(z)	& X\ts{1} & R\ts{2} & R\ts{3} & \\
 \hline
-5 &  &  &  &  &  &  & \\
+5 &  			&  			& lock(y,X) & X\ts{1} & R\ts{2} & R\ts{3} & Warten auf Freigabe von y \\
+\hline
+6 &  			& lock(z,R) &  			& X\ts{1} & R\ts{2} & R\ts{2,3} & \\
+\hline
+7 & lock(z,X)	& read(z) 	& 			& X\ts{1} & R\ts{2} & R\ts{2,3} & Warten auf Freigabe von z \\
+\hline
+8 & 			& read(y) 	&  			& X\ts{1} & R\ts{2} & R\ts{2,3} & \\
+\hline
+9 &  			& unlock(y) &  			& X\ts{1} & X\ts{3} & R\ts{2,3} & Melden an T\ts{3}\\
+\hline
+10 &  			& unlock(z) & write(y)	& X\ts{1} & X\ts{3} & R\ts{3} & \\
+\hline
+11 &  			& commit 	& lock(z,X)	& X\ts{1} & X\ts{3} & R\ts{3} & \\
+\hline
+12 &  			&  			& write(z) 	& X\ts{1} & X\ts{3} & R\ts{3} & \\
+\hline
+13 &  			&  			& unlock(y) & X\ts{1} & NL & R\ts{3} & \\
+\hline
+14 &  			& 			& unlock(z) & X\ts{1} & NL & X\ts{1} & Melden an T\ts{1} \\
+\hline
+15 & write(z)	&  			& commit	& X\ts{1} & NL & X\ts{1} & \\
+\hline
+16 & unlock(x)	&  			&  			& NL & NL & X\ts{1} & \\
+\hline
+17 & unlock(z)	&  			&  			& NL & NL & NL & \\
+\hline
+18 & commit		&  			&  			& NL & NL & NL & \\
 \hline
 \end{tabular}
-
-
-
-\section{*Thema*}
-
-*Lösung*
-
-
-
-
-
 
 \end{document}
