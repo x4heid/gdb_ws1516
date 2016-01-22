@@ -1,0 +1,672 @@
+\documentclass[ngerman]{gdb-aufgabenblatt}
+
+
+\renewcommand{\Aufgabenblatt}{6}
+\renewcommand{\Ausgabedatum}{Mi. 06.01.2016}
+\renewcommand{\Abgabedatum}{Fr. 22.01.2016}
+\renewcommand{\Gruppe}{Kraemer, Mirzada, Frangopoulos, Heid}
+\renewcommand{\STiNEGruppe}{06}
+\renewcommand{\Semester}{WS 2015/16}
+
+
+\begin{document}
+
+\newcommand{\vertexnode}[6]{
+	\node[vertex] (#1)[#2]{\nodepart{one} #3
+					 	   \nodepart{two} #4
+					 	   \nodepart{three} #5
+					 	   \nodepart{four} #6};
+}
+
+\newcommand{\vertexnodeShort}[4]{
+	\node[vertex2] (#1) [#2]{\nodepart{one} #3
+							 \nodepart{two} #4};
+}
+
+\section*{Aufgabe 1: B-Bäume}
+\subsection*{a) Einfügen von Datensätzen}
+\textbf{Ursprungsbaum}\\
+\begin{tikzpicture}[node distance= 1.5cm and 1cm]
+\tikzstyle{vertex} = [rectangle split, rectangle split horizontal, rectangle split parts=4, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=2cm]
+\node[vertex] (root){\nodepart{one} 30
+					 \nodepart{two} 83
+					 \nodepart{three} 
+					 \nodepart{four} };
+					 
+\vertexnode{child1}{below= of root}{38}{72}{75}{}
+\vertexnode{child2}{right= of child1}{86}{98}{}{}
+\vertexnode{child3}{left= of child1}{11}{27}{}{}
+
+\draw[->, thick] (root.205) -- (child1);
+\draw[->, thick] (root.south) -- (child2);
+\draw[->, thick] (root.south west) -- (child3);
+\end{tikzpicture}\\
+
+\textbf{79, 85: Einfaches Einfügen}\\
+\begin{tikzpicture}[node distance= 1.5cm and 1cm]
+\tikzstyle{vertex} = [rectangle split, rectangle split horizontal, rectangle split parts=4, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=2cm]
+\node[vertex] (root){\nodepart{one} 30
+					 \nodepart{two} 83
+					 \nodepart{three} 
+					 \nodepart{four} };
+					 
+\vertexnode{child1}{below= of root}{38}{72}{75}{79}
+\vertexnode{child2}{right= of child1}{85}{86}{98}{}
+\vertexnode{child3}{left= of child1}{11}{27}{}{}
+
+\draw[->, thick] (root.205) -- (child1);
+\draw[->, thick] (root.south) -- (child2);
+\draw[->, thick] (root.south west) -- (child3);
+\end{tikzpicture}
+
+\textbf{81: Einfügen mit Splitten}\\
+\begin{tikzpicture}[node distance= 1.5cm and 1cm]
+\tikzstyle{vertex} = [rectangle split, rectangle split horizontal, rectangle split parts=4, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=2cm]
+\node[vertex] (root){\nodepart{one} 30
+					 \nodepart{two} 75
+					 \nodepart{three} 83
+					 \nodepart{four} };
+					 
+\vertexnode{child1}{below= of root}{38}{72}{}{}
+\vertexnode{child2}{right= of child1}{79}{81}{}{}
+\vertexnode{child3}{left= of child1}{11}{27}{}{}
+\vertexnode{child4}{right= of child2}{85}{86}{98}{}
+
+\draw[->, thick] (root.205) -- (child1);
+\draw[->, thick] (root.south) -- (child2);
+\draw[->, thick] (root.south west) -- (child3);
+\draw[->, thick] (root.335) -- (child4);
+\end{tikzpicture}
+
+\textbf{1, 29, 92: Einfaches Einfügen}\\
+\begin{tikzpicture}[node distance= 1.5cm and 1cm]
+\tikzstyle{vertex} = [rectangle split, rectangle split horizontal, rectangle split parts=4, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=2cm]
+\node[vertex] (root){\nodepart{one} 30
+					 \nodepart{two} 75
+					 \nodepart{three} 83
+					 \nodepart{four} };
+					 
+\vertexnode{child1}{below= of root}{38}{72}{}{}
+\vertexnode{child2}{right= of child1}{79}{81}{}{}
+\vertexnode{child3}{left= of child1}{1}{11}{27}{29}
+\vertexnode{child4}{right= of child2}{85}{86}{92}{98}
+
+\draw[->, thick] (root.205) -- (child1);
+\draw[->, thick] (root.south) -- (child2);
+\draw[->, thick] (root.south west) -- (child3);
+\draw[->, thick] (root.335) -- (child4);
+\end{tikzpicture}
+
+\textbf{9: Einfügen mit Splitten}\\
+\begin{tikzpicture}[node distance= 1.5cm and 1cm]
+\tikzstyle{vertex} = [rectangle split, rectangle split horizontal, rectangle split parts=4, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=2cm]
+\node[vertex] (root){\nodepart{one} 11
+					 \nodepart{two} 30
+					 \nodepart{three} 75
+					 \nodepart{four} 83};
+					 
+\vertexnode{child1}{below = of root}{38}{72}{}{}
+\vertexnode{child2}{below left= of root}{27}{29}{}{}
+\vertexnode{child3}{left= of child2}{1}{9}{}{}
+\vertexnode{child4}{below right= of root}{79}{81}{}{}
+\vertexnode{child5}{right= of child4}{85}{86}{92}{98}
+
+\draw[->, thick] (root.south west) -- (child3);
+\draw[->, thick] (root.205) -- (child2);
+\draw[->, thick] (root.south) -- (child1);
+\draw[->, thick] (root.335) -- (child4);
+\draw[->, thick] (root.south east) -- (child5);
+\end{tikzpicture}
+
+\textbf{94: Einfügen mit Splitten}\\
+\begin{tikzpicture}[node distance= 1.5cm and 1cm]
+\tikzstyle{vertex} = [rectangle split, rectangle split horizontal, rectangle split parts=4, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=2cm]
+\node[vertex] (root){\nodepart{one} 75
+					 \nodepart{two} 
+					 \nodepart{three} 
+					 \nodepart{four}  };
+					 
+%\vertexnode{child1}{below = of root}{38}{72}{}{}
+\vertexnode{child1}{below left= 1.5cm and 2.5cm of root}{11}{30}{}{}
+%\vertexnode{child3}{left= of child2}{1}{9}{}{}
+\vertexnode{child2}{below right= 1.5cm and 2.5cm of root}{83}{92}{}{}
+%\vertexnode{child5}{right= of child4}{85}{86}{92}{98}
+
+\vertexnode{gchild1}{below left= of child1}{1}{9}{}{}
+\vertexnode{gchild2}{below = of child1}{27}{29}{}{}
+\vertexnode{gchild3}{below right= of child1}{38}{72}{}{}
+\vertexnode{gchild4}{below left= of child2}{79}{81}{}{}
+\vertexnode{gchild5}{below = of child2}{85}{86}{}{}
+\vertexnode{gchild6}{below right= of child2}{94}{98}{}{}
+
+
+\draw[->, thick] (root.south west) -- (child1);
+\draw[->, thick] (root.205) -- (child2);
+
+\draw[->, thick] (child1.south west) -- (gchild1);
+\draw[->, thick] (child1.205) -- (gchild2);
+\draw[->, thick] (child1.south) -- (gchild3);
+\draw[->, thick] (child2.south west) -- (gchild4);
+\draw[->, thick] (child2.205) -- (gchild5);
+\draw[->, thick] (child2.south) -- (gchild6);
+
+\end{tikzpicture}
+
+\textbf{16, 31, 21: Einfaches Einfügen}\\
+\begin{tikzpicture}[node distance= 1.5cm and 1cm]
+\tikzstyle{vertex} = [rectangle split, rectangle split horizontal, rectangle split parts=4, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=2cm]
+\node[vertex] (root){\nodepart{one} 75
+					 \nodepart{two} 
+					 \nodepart{three} 
+					 \nodepart{four}  };
+					 
+%\vertexnode{child1}{below = of root}{38}{72}{}{}
+\vertexnode{child1}{below left= 1.5cm and 2.5cm of root}{11}{30}{}{}
+%\vertexnode{child3}{left= of child2}{1}{9}{}{}
+\vertexnode{child2}{below right= 1.5cm and 2.5cm of root}{83}{92}{}{}
+%\vertexnode{child5}{right= of child4}{85}{86}{92}{98}
+
+\vertexnode{gchild1}{below left= of child1}{1}{9}{}{}
+\vertexnode{gchild2}{below = of child1}{16}{21}{27}{29}
+\vertexnode{gchild3}{below right= of child1}{31}{38}{72}{}
+\vertexnode{gchild4}{below left= of child2}{79}{81}{}{}
+\vertexnode{gchild5}{below = of child2}{85}{86}{}{}
+\vertexnode{gchild6}{below right= of child2}{94}{98}{}{}
+
+
+\draw[->, thick] (root.south west) -- (child1);
+\draw[->, thick] (root.205) -- (child2);
+
+\draw[->, thick] (child1.south west) -- (gchild1);
+\draw[->, thick] (child1.205) -- (gchild2);
+\draw[->, thick] (child1.south) -- (gchild3);
+\draw[->, thick] (child2.south west) -- (gchild4);
+\draw[->, thick] (child2.205) -- (gchild5);
+\draw[->, thick] (child2.south) -- (gchild6);
+
+\end{tikzpicture}
+
+\textbf{14: Einfügen mit Splitten}\\
+\begin{tikzpicture}[node distance= 1.5cm and 1cm]
+\tikzstyle{vertex} = [rectangle split, rectangle split horizontal, rectangle split parts=4, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=2cm]
+\node[vertex] (root){\nodepart{one} 75
+					 \nodepart{two} 
+					 \nodepart{three} 
+					 \nodepart{four}  };
+					 
+%\vertexnode{child1}{below = of root}{38}{72}{}{}
+\vertexnode{child1}{below left= 1.5cm and 2.5cm of root}{11}{21}{30}{}
+%\vertexnode{child3}{left= of child2}{1}{9}{}{}
+\vertexnode{child2}{below right= 1.5cm and 2.5cm of root}{83}{92}{}{}
+%\vertexnode{child5}{right= of child4}{85}{86}{92}{98}
+
+\vertexnode{gchild1}{below left= of child1}{1}{9}{}{}
+\vertexnode{gchild2}{below = of child1}{14}{16}{}{}
+\vertexnode{gchild3}{below right= of child1}{31}{38}{72}{}
+\vertexnode{gchild7}{below right= 0.5cm and 0.0cm of gchild2}{27}{29}{}{}
+\vertexnode{gchild4}{below left= of child2}{79}{81}{}{}
+\vertexnode{gchild5}{below = of child2}{85}{86}{}{}
+\vertexnode{gchild6}{below right= of child2}{94}{98}{}{}
+
+
+\draw[->, thick] (root.south west) -- (child1);
+\draw[->, thick] (root.205) -- (child2);
+
+\draw[->, thick] (child1.south west) -- (gchild1);
+\draw[->, thick] (child1.205) -- (gchild2);
+\draw[->, thick] (child1.south) -- (gchild7);
+\draw[->, thick] (child1.335) -- (gchild3);
+\draw[->, thick] (child2.south west) -- (gchild4);
+\draw[->, thick] (child2.205) -- (gchild5);
+\draw[->, thick] (child2.south) -- (gchild6);
+
+\end{tikzpicture}
+
+
+
+
+\newpage
+\subsection*{b) Löschen von Datensätzen}
+\textbf{Ursprungsbaum}\\
+\begin{tikzpicture}[node distance= 1.5cm and 1cm]
+\tikzstyle{vertex} = [rectangle split, rectangle split horizontal, rectangle split parts=4, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=2cm]
+\node[vertex] (root){\nodepart{one} 43
+					 \nodepart{two} 
+					 \nodepart{three} 
+					 \nodepart{four} };
+					 
+\vertexnode{child1}{below left= 1.5cm and 2.5cm of root}{21}{32}{}{}
+\vertexnode{child2}{below right= 1.5cm and 2.5cm of root}{58}{94}{}{}
+
+\vertexnode{gchild1}{below left= of child1}{4}{8}{}{}
+\vertexnode{gchild2}{below = of child1}{24}{28}{}{}
+\vertexnode{gchild3}{below right= of child1}{34}{38}{41}{}
+\vertexnode{gchild4}{below left= of child2}{45}{52}{53}{57}
+\vertexnode{gchild5}{below = of child2}{61}{82}{}{}
+\vertexnode{gchild6}{below right= of child2}{97}{98}{}{}
+
+
+
+\draw[->, thick] (root.south west) -- (child1);
+\draw[->, thick] (root.205) -- (child2);
+
+\draw[->, thick] (child1.south west) -- (gchild1);
+\draw[->, thick] (child1.205) -- (gchild2);
+\draw[->, thick] (child1.south) -- (gchild3);
+\draw[->, thick] (child2.south west) -- (gchild4);
+\draw[->, thick] (child2.205) -- (gchild5);
+\draw[->, thick] (child2.south) -- (gchild6);
+\end{tikzpicture}\\
+
+\textbf{52, 34: Einfaches Löschen}\\
+\begin{tikzpicture}[node distance= 1.5cm and 1cm]
+\tikzstyle{vertex} = [rectangle split, rectangle split horizontal, rectangle split parts=4, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=2cm]
+\node[vertex] (root){\nodepart{one} 43
+					 \nodepart{two} 
+					 \nodepart{three} 
+					 \nodepart{four} };
+					 
+\vertexnode{child1}{below left= 1.5cm and 2.5cm of root}{21}{32}{}{}
+\vertexnode{child2}{below right= 1.5cm and 2.5cm of root}{58}{94}{}{}
+
+\vertexnode{gchild1}{below left= of child1}{4}{8}{}{}
+\vertexnode{gchild2}{below = of child1}{24}{28}{}{}
+\vertexnode{gchild3}{below right= of child1}{38}{41}{}{}
+\vertexnode{gchild4}{below left= of child2}{45}{53}{57}{}
+\vertexnode{gchild5}{below = of child2}{61}{82}{}{}
+\vertexnode{gchild6}{below right= of child2}{97}{98}{}{}
+
+
+
+\draw[->, thick] (root.south west) -- (child1);
+\draw[->, thick] (root.205) -- (child2);
+
+\draw[->, thick] (child1.south west) -- (gchild1);
+\draw[->, thick] (child1.205) -- (gchild2);
+\draw[->, thick] (child1.south) -- (gchild3);
+\draw[->, thick] (child2.south west) -- (gchild4);
+\draw[->, thick] (child2.205) -- (gchild5);
+\draw[->, thick] (child2.south) -- (gchild6);
+\end{tikzpicture}\\
+
+\textbf{97: Löschen mit Mischen}\\
+\begin{tikzpicture}[node distance= 1.5cm and 1cm]
+\tikzstyle{vertex} = [rectangle split, rectangle split horizontal, rectangle split parts=4, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=2cm]
+\node[vertex] (root){\nodepart{one} 28
+					 \nodepart{two} 43
+					 \nodepart{three} 58
+					 \nodepart{four} };
+
+\vertexnode{child2}{below left= of root}{32}{38}{41}{}				 
+\vertexnode{child1}{left= of child2}{4}{8}{21}{24}
+
+\vertexnode{child3}{below right= of root}{45}{53}{57}{}
+\vertexnode{child4}{right= of child3}{61}{82}{94}{98}
+
+%\vertexnode{gchild1}{below left= of child1}{4}{8}{}{}
+%\vertexnode{gchild2}{below = of child1}{24}{28}{}{}
+%\vertexnode{gchild3}{below right= of child1}{38}{41}{}{}
+%\vertexnode{gchild4}{below left= of child2}{45}{53}{57}{}
+%\vertexnode{gchild5}{below = of child2}{61}{82}{}{}
+%\vertexnode{gchild6}{below right= of child2}{97}{98}{}{}
+
+
+
+\draw[->, thick] (root.south west) -- (child1);
+\draw[->, thick] (root.205) -- (child2);
+\draw[->, thick] (root.south) -- (child3);
+\draw[->, thick] (root.335) -- (child4);
+
+
+%\draw[->, thick] (child1.south west) -- (gchild1);
+%\draw[->, thick] (child1.205) -- (gchild2);
+%\draw[->, thick] (child1.south) -- (gchild3);
+%\draw[->, thick] (child2.south west) -- (gchild4);
+%\draw[->, thick] (child2.205) -- (gchild5);
+%\draw[->, thick] (child2.south) -- (gchild6);
+\end{tikzpicture}\\
+
+\textbf{41, 94: Einfaches Löschen}\\
+\begin{tikzpicture}[node distance= 1.5cm and 1cm]
+\tikzstyle{vertex} = [rectangle split, rectangle split horizontal, rectangle split parts=4, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=2cm]
+\node[vertex] (root){\nodepart{one} 28
+					 \nodepart{two} 43
+					 \nodepart{three} 58
+					 \nodepart{four} };
+
+\vertexnode{child2}{below left= of root}{32}{38}{}{}				 
+\vertexnode{child1}{left= of child2}{4}{8}{21}{24}
+
+\vertexnode{child3}{below right= of root}{45}{53}{57}{}
+\vertexnode{child4}{right= of child3}{61}{82}{98}{}
+
+%\vertexnode{gchild1}{below left= of child1}{4}{8}{}{}
+%\vertexnode{gchild2}{below = of child1}{24}{28}{}{}
+%\vertexnode{gchild3}{below right= of child1}{38}{41}{}{}
+%\vertexnode{gchild4}{below left= of child2}{45}{53}{57}{}
+%\vertexnode{gchild5}{below = of child2}{61}{82}{}{}
+%\vertexnode{gchild6}{below right= of child2}{97}{98}{}{}
+
+
+
+\draw[->, thick] (root.south west) -- (child1);
+\draw[->, thick] (root.205) -- (child2);
+\draw[->, thick] (root.south) -- (child3);
+\draw[->, thick] (root.335) -- (child4);
+
+
+%\draw[->, thick] (child1.south west) -- (gchild1);
+%\draw[->, thick] (child1.205) -- (gchild2);
+%\draw[->, thick] (child1.south) -- (gchild3);
+%\draw[->, thick] (child2.south west) -- (gchild4);
+%\draw[->, thick] (child2.205) -- (gchild5);
+%\draw[->, thick] (child2.south) -- (gchild6);
+\end{tikzpicture}\\
+
+\textbf{28: Löschen mit Ausgleichen}\\
+\begin{tikzpicture}[node distance= 1.5cm and 1cm]
+\tikzstyle{vertex} = [rectangle split, rectangle split horizontal, rectangle split parts=4, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=2cm]
+\node[vertex] (root){\nodepart{one} 24
+					 \nodepart{two} 43
+					 \nodepart{three} 58
+					 \nodepart{four} };
+
+\vertexnode{child2}{below left= of root}{32}{38}{}{}				 
+\vertexnode{child1}{left= of child2}{4}{8}{21}{}
+
+\vertexnode{child3}{below right= of root}{45}{53}{57}{}
+\vertexnode{child4}{right= of child3}{61}{82}{98}{}
+
+%\vertexnode{gchild1}{below left= of child1}{4}{8}{}{}
+%\vertexnode{gchild2}{below = of child1}{24}{28}{}{}
+%\vertexnode{gchild3}{below right= of child1}{38}{41}{}{}
+%\vertexnode{gchild4}{below left= of child2}{45}{53}{57}{}
+%\vertexnode{gchild5}{below = of child2}{61}{82}{}{}
+%\vertexnode{gchild6}{below right= of child2}{97}{98}{}{}
+
+
+
+\draw[->, thick] (root.south west) -- (child1);
+\draw[->, thick] (root.205) -- (child2);
+\draw[->, thick] (root.south) -- (child3);
+\draw[->, thick] (root.335) -- (child4);
+
+
+%\draw[->, thick] (child1.south west) -- (gchild1);
+%\draw[->, thick] (child1.205) -- (gchild2);
+%\draw[->, thick] (child1.south) -- (gchild3);
+%\draw[->, thick] (child2.south west) -- (gchild4);
+%\draw[->, thick] (child2.205) -- (gchild5);
+%\draw[->, thick] (child2.south) -- (gchild6);
+\end{tikzpicture}\\
+
+\textbf{98, 4: Einfaches Löschen}\\
+\begin{tikzpicture}[node distance= 1.5cm and 1cm]
+\tikzstyle{vertex} = [rectangle split, rectangle split horizontal, rectangle split parts=4, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=2cm]
+\node[vertex] (root){\nodepart{one} 24
+					 \nodepart{two} 43
+					 \nodepart{three} 58
+					 \nodepart{four} };
+
+\vertexnode{child2}{below left= of root}{32}{38}{}{}				 
+\vertexnode{child1}{left= of child2}{8}{21}{}{}
+
+\vertexnode{child3}{below right= of root}{45}{53}{57}{}
+\vertexnode{child4}{right= of child3}{61}{82}{}{}
+
+%\vertexnode{gchild1}{below left= of child1}{4}{8}{}{}
+%\vertexnode{gchild2}{below = of child1}{24}{28}{}{}
+%\vertexnode{gchild3}{below right= of child1}{38}{41}{}{}
+%\vertexnode{gchild4}{below left= of child2}{45}{53}{57}{}
+%\vertexnode{gchild5}{below = of child2}{61}{82}{}{}
+%\vertexnode{gchild6}{below right= of child2}{97}{98}{}{}
+
+
+
+\draw[->, thick] (root.south west) -- (child1);
+\draw[->, thick] (root.205) -- (child2);
+\draw[->, thick] (root.south) -- (child3);
+\draw[->, thick] (root.335) -- (child4);
+
+
+%\draw[->, thick] (child1.south west) -- (gchild1);
+%\draw[->, thick] (child1.205) -- (gchild2);
+%\draw[->, thick] (child1.south) -- (gchild3);
+%\draw[->, thick] (child2.south west) -- (gchild4);
+%\draw[->, thick] (child2.205) -- (gchild5);
+%\draw[->, thick] (child2.south) -- (gchild6);
+\end{tikzpicture}\\
+
+
+
+
+
+\newpage
+\section*{Aufgabe 2: B*-Bäume}
+\subsection*{a) Einfügen von Datensätzen}
+\textbf{Ursprungsbaum}\\
+\begin{tikzpicture}[node distance= 1cm and 1cm]
+\tikzstyle{vertex} = [rectangle split, rectangle split horizontal, rectangle split parts=4, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=2cm]
+\tikzstyle{vertex2} = [rectangle split, rectangle split horizontal, rectangle split parts=2, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=1cm]
+\node[vertex2] (root){\nodepart{one} 9
+					 \nodepart{two}  };
+\vertexnode{child1}{below left= of root}{1}{5}{7}{8}
+\vertexnode{child2}{below right= of root}{40}{53}{61}{}
+
+\draw[->, very thick] (root.south west) -- (child1);
+\draw[->, very thick] (root.south) -- (child2);
+
+\end{tikzpicture}\\
+
+\textbf{64: Einfaches Einfügen}\\
+\begin{tikzpicture}[node distance= 1cm and 1cm]
+\tikzstyle{vertex} = [rectangle split, rectangle split horizontal, rectangle split parts=4, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=2cm]
+\tikzstyle{vertex2} = [rectangle split, rectangle split horizontal, rectangle split parts=2, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=1cm]
+\node[vertex2] (root){\nodepart{one} 9
+					 \nodepart{two}  };
+\vertexnode{child1}{below left= of root}{1}{5}{7}{8}
+\vertexnode{child2}{below right= of root}{40}{53}{61}{64}
+
+\draw[->, very thick] (root.south west) -- (child1);
+\draw[->, very thick] (root.south) -- (child2);
+
+\end{tikzpicture}\\
+
+\textbf{3: Einfügen mit Splitten}\\
+\begin{tikzpicture}[node distance= 1cm and 1cm]
+\tikzstyle{vertex} = [rectangle split, rectangle split horizontal, rectangle split parts=4, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=2cm]
+\tikzstyle{vertex2} = [rectangle split, rectangle split horizontal, rectangle split parts=2, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=1cm]
+\node[vertex2] (root){\nodepart{one} 5
+					 \nodepart{two}  9};
+\vertexnode{child1}{below left= of root}{1}{3}{}{}
+\vertexnode{child2}{below right= of root}{40}{53}{61}{64}
+\vertexnode{child3}{below = of root}{7}{8}{}{}
+
+\draw[->, very thick] (root.south west) -- (child1);
+\draw[->, very thick] (root.south east) -- (child2);
+\draw[->, very thick] (root.south) -- (child3);
+
+\end{tikzpicture}\\
+
+\textbf{6: Einfaches Einfügen}\\
+\begin{tikzpicture}[node distance= 1cm and 1cm]
+\tikzstyle{vertex} = [rectangle split, rectangle split horizontal, rectangle split parts=4, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=2cm]
+\tikzstyle{vertex2} = [rectangle split, rectangle split horizontal, rectangle split parts=2, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=1cm]
+\node[vertex2] (root){\nodepart{one} 5
+					 \nodepart{two}  9};
+\vertexnode{child1}{below left= of root}{1}{3}{}{}
+\vertexnode{child2}{below right= of root}{40}{53}{61}{64}
+\vertexnode{child3}{below = of root}{6}{7}{8}{}
+
+\draw[->, very thick] (root.south west) -- (child1);
+\draw[->, very thick] (root.south east) -- (child2);
+\draw[->, very thick] (root.south) -- (child3);
+
+\end{tikzpicture}\\
+
+\textbf{80: Einfügen mit Splitten}\\
+\begin{tikzpicture}[node distance= 1cm and 1cm]
+\tikzstyle{vertex} = [rectangle split, rectangle split horizontal, rectangle split parts=4, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=2cm]
+\tikzstyle{vertex2} = [rectangle split, rectangle split horizontal, rectangle split parts=2, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=1cm]
+\node[vertex2] (root){\nodepart{one} 5
+					 \nodepart{two}  9};
+\vertexnode{child1}{below left= of root}{1}{3}{}{}
+\vertexnode{child2}{below right= of root}{40}{53}{61}{64}
+\vertexnode{child3}{below = of root}{6}{7}{8}{}
+
+\draw[->, very thick] (root.south west) -- (child1);
+\draw[->, very thick] (root.south east) -- (child2);
+\draw[->, very thick] (root.south) -- (child3);
+
+\end{tikzpicture}\\
+
+
+\subsection*{b) Löschen von Datensätzen}
+\textbf{Ursprungsbaum}\\
+\begin{tikzpicture}[node distance= 1cm and 1cm]
+\tikzstyle{vertex} = [rectangle split, rectangle split horizontal, rectangle split parts=4, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=2cm]
+\tikzstyle{vertex2} = [rectangle split, rectangle split horizontal, rectangle split parts=2, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=1cm]
+\node[vertex2] (root){\nodepart{one} 54
+					 \nodepart{two}  };
+\vertexnodeShort{child1}{below left=1cm and 2cm of root}{34}{40}
+\vertexnodeShort{child2}{below right=1cm and 2cm of root}{76}{}
+
+\vertexnodeShort{gchild1}{below left=of child1}{12}{14}
+\vertexnodeShort{gchild2}{below =of child1}{38}{}
+\vertexnodeShort{gchild3}{below right=of child1}{44}{46}
+\vertexnodeShort{gchild4}{below left=of child2}{76}{}
+\vertexnodeShort{gchild5}{below =of child2}{68}{}
+\vertexnodeShort{gchild6}{below right=of child2}{86}{}
+
+\draw[->, very thick] (root.south west) -- (child1);
+\draw[->, very thick] (root.south) -- (child2);
+
+\draw[->, very thick] (child1.south west) -- (gchild1);
+\draw[->, very thick] (child1.south) -- (gchild2);
+\draw[->, very thick] (child1.south east) -- (gchild3);
+
+\draw[->, very thick] (child2.south west) -- (gchild4);
+\draw[->, very thick] (child2.south) -- (gchild5);
+\draw[->, very thick] (child2.south east) -- (gchild6);
+\end{tikzpicture}
+
+\textbf{14: Einfaches Löschen}\\
+\begin{tikzpicture}[node distance= 1cm and 1cm]
+\tikzstyle{vertex} = [rectangle split, rectangle split horizontal, rectangle split parts=4, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=2cm]
+\tikzstyle{vertex2} = [rectangle split, rectangle split horizontal, rectangle split parts=2, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=1cm]
+\node[vertex2] (root){\nodepart{one} 54
+					 \nodepart{two}  };
+\vertexnodeShort{child1}{below left=1cm and 2cm of root}{34}{40}
+\vertexnodeShort{child2}{below right=1cm and 2cm of root}{76}{}
+
+\vertexnodeShort{gchild1}{below left=of child1}{12}{}
+\vertexnodeShort{gchild2}{below =of child1}{38}{}
+\vertexnodeShort{gchild3}{below right=of child1}{44}{46}
+\vertexnodeShort{gchild4}{below left=of child2}{76}{}
+\vertexnodeShort{gchild5}{below =of child2}{68}{}
+\vertexnodeShort{gchild6}{below right=of child2}{86}{}
+
+\draw[->, very thick] (root.south west) -- (child1);
+\draw[->, very thick] (root.south) -- (child2);
+
+\draw[->, very thick] (child1.south west) -- (gchild1);
+\draw[->, very thick] (child1.south) -- (gchild2);
+\draw[->, very thick] (child1.south east) -- (gchild3);
+
+\draw[->, very thick] (child2.south west) -- (gchild4);
+\draw[->, very thick] (child2.south) -- (gchild5);
+\draw[->, very thick] (child2.south east) -- (gchild6);
+\end{tikzpicture}
+
+\textbf{38: Löschen mit Mischen}\\
+\begin{tikzpicture}[node distance= 1cm and 1cm]
+\tikzstyle{vertex} = [rectangle split, rectangle split horizontal, rectangle split parts=4, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=2cm]
+\tikzstyle{vertex2} = [rectangle split, rectangle split horizontal, rectangle split parts=2, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=1cm]
+\node[vertex2] (root){\nodepart{one} 54
+					 \nodepart{two}  };
+\vertexnodeShort{child1}{below left=1cm and 2cm of root}{40}{}
+\vertexnodeShort{child2}{below right=1cm and 2cm of root}{76}{}
+
+\vertexnodeShort{gchild1}{below left=of child1}{12}{34}
+%\vertexnodeShort{gchild2}{below =of child1}{38}{}
+\vertexnodeShort{gchild3}{below right=of child1}{44}{46}
+\vertexnodeShort{gchild4}{below left=of child2}{76}{}
+\vertexnodeShort{gchild5}{below =of child2}{68}{}
+\vertexnodeShort{gchild6}{below right=of child2}{86}{}
+
+\draw[->, very thick] (root.south west) -- (child1);
+\draw[->, very thick] (root.south) -- (child2);
+
+\draw[->, very thick] (child1.south west) -- (gchild1);
+%\draw[->, very thick] (child1.south) -- (gchild2);
+\draw[->, very thick] (child1.south) -- (gchild3);
+
+\draw[->, very thick] (child2.south west) -- (gchild4);
+\draw[->, very thick] (child2.south) -- (gchild5);
+\draw[->, very thick] (child2.south east) -- (gchild6);
+\end{tikzpicture}
+
+\textbf{12, 44: Einfaches Löschen}\\
+\begin{tikzpicture}[node distance= 1cm and 1cm]
+\tikzstyle{vertex} = [rectangle split, rectangle split horizontal, rectangle split parts=4, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=2cm]
+\tikzstyle{vertex2} = [rectangle split, rectangle split horizontal, rectangle split parts=2, draw, text width = 0.3cm, align = center, minimum height=0.5cm, minimum width=1cm]
+\node[vertex2] (root){\nodepart{one} 54
+					 \nodepart{two}  };
+\vertexnodeShort{child1}{below left=1cm and 2cm of root}{40}{}
+\vertexnodeShort{child2}{below right=1cm and 2cm of root}{76}{}
+
+\vertexnodeShort{gchild1}{below left=of child1}{34}{}
+%\vertexnodeShort{gchild2}{below =of child1}{38}{}
+\vertexnodeShort{gchild3}{below right=of child1}{46}{}
+\vertexnodeShort{gchild4}{below left=of child2}{76}{}
+\vertexnodeShort{gchild5}{below =of child2}{68}{}
+\vertexnodeShort{gchild6}{below right=of child2}{86}{}
+
+\draw[->, very thick] (root.south west) -- (child1);
+\draw[->, very thick] (root.south) -- (child2);
+
+\draw[->, very thick] (child1.south west) -- (gchild1);
+%\draw[->, very thick] (child1.south) -- (gchild2);
+\draw[->, very thick] (child1.south) -- (gchild3);
+
+\draw[->, very thick] (child2.south west) -- (gchild4);
+\draw[->, very thick] (child2.south) -- (gchild5);
+\draw[->, very thick] (child2.south east) -- (gchild6);
+\end{tikzpicture}
+\section*{Aufgabe 3: Berechnungen in B- und B*-Bäumen}
+\subsection*{a) Max und Min des B*-Baumes}
+i) 343*10 = 3430\\
+ii) 50*5 = 250
+
+\subsection*{b) B-Baum - Werte für $h$}
+Auf allen Ebenen (ab der Wurzel) könnten alle Seiten / Knoten
+höchstens 8 Datensätze haben.\\
+Bei einer Höhe von 2 passen alsoschon 8 + 9*8 = 80 Datensätze hinein.\\
+Die Wurzel muss minimal einen Datensatz besitzen und alle anderen Knoten mindestens 4.\\
+Bei einer Höhe von 3 wären dann noch nicht alle Datensätze untergebracht:
+1 + 2*4 + 10*4 = 49.\\
+Also bewegt sich die Höhe zwischen 2 und 4.
+
+\subsection*{c) B*-Baum - Anzahl Datensätze}
+2*42 = 84
+
+\section*{Aufgabe 4: Normalformenlehre}
+\subsection*{i) Schlüsselkandidaten}
+\begin{verbatim}
+B    oder
+B, A oder
+B, C oder
+A, C
+\end{verbatim}
+\subsection*{ii) Nicht-Primärattribute}
+\begin{verbatim}
+E, D
+\end{verbatim}
+
+\subsection*{iii) Normalform des Relationsschemas}
+Wir nehmen an 'B' wird als Primärschlüssel verwendet.\\ 
+Das Relationsschema ist in 1NF und auch in 2NF, denn kein Nicht-Primärattribut ist partiell von einem Schlüsselattribut abhängig. Dies sieht man schon daran, dass 'B' atomar ist.\\
+Das Relationsschema ist nicht in 3NF, da 'D' transitiv über 'A,C' von 'B' abhängt.
+
+
+\end{document}
